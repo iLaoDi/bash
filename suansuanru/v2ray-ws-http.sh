@@ -20,7 +20,8 @@ echo && stty erase '^H' && read -p "输入域名: " domain
 [[ $OS == "CentOS" ]] && cmd='yum'
 
 $cmd install curl lrzsz zip unzip psmisc uuid -y
-curl https://getcaddy.com | bash -s personal http.cache,http.filter
+wget -O /usr/bin/caddy https://raw.githubusercontent.com/caippx/caddy-v1/master/caddy
+chmod +x /usr/bin/caddy
 ulimit -n 512000
 mkdir -p /data/www/
 mkdir -p /etc/caddy/conf.d
@@ -36,7 +37,8 @@ http://$domain:80 {
 " > /etc/caddy/conf.d/$domain
 mkdir /data/www/$domain
 echo "waiting content ~ " > /data/www/$domain/index.html
-bash <(curl -s -L https://install.direct/go.sh)
+bash <(curl -s -L https://raw.githubusercontent.com/caippx/bash/master/suansuanru/lajiv2ray-install.sh)
+rm -rf /usr/local/etc/v2ray/*.json
 echo '
 {
   "log": {
@@ -97,12 +99,12 @@ echo '
   "reverse": {},
   "transport": {}
 }
-' > /etc/v2ray/config.json
+' > /usr/local/etc/v2ray/config.json
 killall -9 caddy
 ulimit -n 512000
 nohup caddy -conf=/etc/caddy/caddy.conf -agree -quic >> /tmp/caddy.log 2>&1 &
 service v2ray restart
-uuid=`cat /etc/v2ray/config.json | grep "id" | cut -d '"' -f 4`
+uuid=`cat /usr/local/etc/v2ray/config.json | grep "id" | cut -d '"' -f 4`
 ip=`curl -s http://whatismyip.akamai.com`
 echo "
 连接信息：
@@ -120,23 +122,23 @@ IP: $ip
 重复查看URL 请使用cat /etc/v2url.txt
 "
 txt='
-{
-  "v": "2",
-  "ps": "'$domain'",
-  "add": "'$ip'",
-  "port": "80",
-  "id": "'$uuid'",
-  "aid": "233",
-  "net": "ws",
-  "type": "none",
-  "host": "'$domain'",
-  "path": "/static",
-  "tls": ""
-}
-'
-encode=`echo $txt| base64`
+{\n
+  "v": "2",\n
+  "ps": "'$domain'",\n
+  "add": "'$ip'",\n
+  "port": "80",\n
+  "id": "'$uuid'",\n
+  "aid": "233",\n
+  "net": "ws",\n
+  "type": "none",\n
+  "host": "'$domain'",\n
+  "path": "/static",\n
+  "tls": ""\n
+}'
+
+encode=`echo -e $txt | base64`
 url="vmess://$encode"
 echo $url > /etc/v2url.txt
+sed -i 's/[ ][ ]*//g' /etc/v2url.txt
 cat /etc/v2url.txt
-
  

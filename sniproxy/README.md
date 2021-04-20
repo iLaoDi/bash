@@ -1,3 +1,21 @@
+
+#2020-9-15新版
+
+GO版 make_install 用于自定义编译
+
+已经编译好的 支持linux amd64：
+
+Ver1 仅支持https 可自定义错误返回地址：<br>
+wget -O /usr/local/bin/sniproxy https://raw.githubusercontent.com/caippx/bash/master/sniproxy/sniproxy <br>
+chmod +x /usr/local/bin/sniproxy<br>
+nohup sniproxy -c /usr/local/config.yaml >> /tmp/sni.log 2>&1 &<br>
+
+
+Ver2 支持http和https[推荐]：<br>
+wget -O /usr/local/bin/sniproxy https://raw.githubusercontent.com/caippx/bash/master/sniproxy/sniproxy_s<br>
+chmod +x /usr/local/bin/sniproxy<br>
+nohup sniproxy >> /tmp/sni.log 2>&1 &<br>
+
 bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/caippx/bash/master/sniproxy/instsall.sh')
 
 
@@ -26,3 +44,4 @@ table https_hosts {
 查看状态：service sniproxy status
 
 配置文件：/etc/sniproxy.conf
+

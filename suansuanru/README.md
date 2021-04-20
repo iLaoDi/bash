@@ -14,3 +14,23 @@ bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/caipp
 
 
 bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/caippx/bash/master/suansuanru/v2ray-ws-http.sh')
+
+#GOST<br>
+echo "65.52.162.210 raw.githubusercontent.com" >> /etc/hosts<br>
+echo "65.52.162.210 github-releases.githubusercontent.com" >> /etc/hosts<br>
+echo "65.52.162.210 github.com" >> /etc/hosts<br>
+wget https://github.com/ginuerzh/gost/releases/download/v2.11.1/gost-linux-amd64-2.11.1.gz && gunzip gost-linux-amd64-2.11.1.gz<br>
+mv gost-linux-amd64-2.11.1 /usr/bin/gost && chmod +x /usr/bin/gost<br>
+gost -L=rtcp://:8848/remote_ip:8080 <br>
+nohup gost -L socks5://:55888 >>/dev/null 2>&1 & <br>
+nohup gost -L http://:55888 >>/dev/null 2>&1 & <br>
+nohup gost -L=tcp://:80/1.0.0.1:80 >>/dev/null 2>&1 & <br>
+nohup gost -L=tcp://:443/1.0.0.1:443 >>/dev/null 2>&1 & <br>
+nohup gost -L=udp://:443/1.0.0.1:443 >>/dev/null 2>&1 & <br>
+
+iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT <br>
+iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT <br>
+iptables -I INPUT -p udp -m state --state NEW -m udp --dport 443 -j ACCEPT <br>
+
+Nat<br>
+wget -O /usr/bin/nat https://raw.githubusercontent.com/caippx/bash/master/suansuanru/nat.sh && chmod +x /usr/bin/nat <br>
